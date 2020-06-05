@@ -1,6 +1,6 @@
 // Nguồn tham khảo: bạn Âu Dương Tấn Sang, MSSV: 1712145
 
-function prewitt(imgData, th) {
+function prewitt(imgData) {
 
     //Some image information
     var row = imgData.height;
@@ -20,39 +20,22 @@ function prewitt(imgData, th) {
             //Current position
             var center = i * rowStep + j * colStep;
 
-            //Get value of 8 neighbor pixels (green channel)
-            //var topLeft = data[center - rowStep - colStep + 1];
-            //var top = data[center - rowStep + 1];
-            //var topRight = data[center - rowStep + colStep + 1];
-            //var left = data[center - colStep + 1];
-            // var right = data[center + colStep + 1];
-            // var bottomLeft = data[center + rowStep - colStep + 1];
-            // var bottom = data[center + rowStep + 1];
-            // var bottomRight = data[center + rowStep + colStep + 1];
-
-            //Calculate the gradient
-            // var dx = (topRight - topLeft) + 2 * (right - left) + (bottomRight - bottomLeft);
-            // var dy = (bottomLeft - topLeft) + 2 * (bottom - top) + (bottomRight - topRight);
-            // var grad = Math.sqrt(dx * dx + dy * dy);
-
-
-            //Calculate Convolution
-            var prewitt_dx = data[center + rowStep + colStep + 1]* -1 +
-                             data[center + rowStep - colStep + 1]*1 +
-                             data[center + colStep + 1]*-1 +
-                             data[center - colStep + 1]*1+
-                             data[center - rowStep + colStep + 1]*-1+
-                             data[center - rowStep - colStep + 1]*1
+            var prewitt_dx = data[center + rowStep + colStep]* -1 +
+                             data[center + rowStep - colStep]*1 +
+                             data[center + colStep]*-1 +
+                             data[center - colStep]*1+
+                             data[center - rowStep + colStep]*-1+
+                             data[center - rowStep - colStep]*1
             
-            var prewitt_dy = data[center + rowStep + colStep + 1]*1 +
-                             data[center + rowStep + 1]*1+
-                             data[center + rowStep - colStep + 1]*1 + 
-                             data[center - rowStep + colStep + 1]*-1+
-                             data[center - rowStep + 1]*-1 + 
-                             data[center - rowStep - colStep + 1]*-1
+            var prewitt_dy = data[center + rowStep + colStep]*1 +
+                             data[center + rowStep]*1+
+                             data[center + rowStep - colStep]*1 + 
+                             data[center - rowStep + colStep]*-1+
+                             data[center - rowStep]*-1 + 
+                             data[center - rowStep - colStep]*-1
 
             //Thresholding
-            if (Math.sqrt(prewitt_dx*prewitt_dx+prewitt_dy*prewitt_dy) >= th)
+            if (Math.sqrt(prewitt_dx*prewitt_dx+prewitt_dy*prewitt_dy) >= 100)
                 newImgData.data[center] = newImgData.data[center + 1] = newImgData.data[center + 2] = 255;
             else
                 newImgData.data[center] = newImgData.data[center + 1] = newImgData.data[center + 2] = 0;
@@ -77,8 +60,6 @@ window.onload = function () {
     //var slider = document.getElementById("intensity");
     var button = document.getElementById("myButton");
 
-    //Threshold for edge detection
-    var threshold = 100;
 
     //Play/Pause button event handler
     button.onclick = function () {
@@ -115,7 +96,7 @@ window.onload = function () {
 
                 //Get image data from context1 and detect edge
                 var frameData = context1.getImageData(0, 0, vid.videoWidth, vid.videoHeight);
-                var frameEdge = prewitt(frameData, threshold);
+                var frameEdge = prewitt(frameData);
 
                 //Draw edge image data on context2
                 context2.putImageData(frameEdge, 0, 0);

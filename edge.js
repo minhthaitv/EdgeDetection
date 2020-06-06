@@ -57,37 +57,12 @@ window.onload = function () {
     var context2 = canvas2.getContext("2d");
 
     var video = document.getElementById("myVideo");
-    //var slider = document.getElementById("intensity");
-    var button = document.getElementById("myButton");
-
-
-    //Play/Pause button event handler
-    button.onclick = function () {
-        if (video.paused) {
-            video.play();
-            button.innerHTML = "Pause";
-        }
-        else {
-            video.pause();
-            button.innerHTML = "Play";
-        }
-    };
-
-
-    //Do some initializations when video is ready
-    video.oncanplay = function () {
-        var vid = this;
-
-        canvas1.width = canvas2.width = vid.videoWidth;
-        canvas1.height = canvas2.height = vid.videoHeight;
-
-        button.disabled = false;
-    };
-
+    video.play();
     //Extract video frames and detect edge while video is playing
     video.onplay = function () {
         var vid = this;
-
+        canvas1.width = canvas2.width = vid.videoWidth;
+        canvas1.height = canvas2.height = vid.videoHeight;
         (function loop() {
             if (!vid.paused && !vid.ended) {
 
@@ -105,11 +80,6 @@ window.onload = function () {
                 setTimeout(loop, 1000 / 30);
             }
         })();
-    };
-
-    //Change button to "Play" when video has ended
-    video.onended = function () {
-        button.innerHTML = "Play";
     };
 };
 

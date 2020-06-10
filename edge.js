@@ -57,6 +57,8 @@ window.onload = function () {
     var context2 = canvas2.getContext("2d");
 
     var video = document.getElementById("myVideo");
+    canvas1.width = canvas2.width = video.videoWidth;
+    canvas1.height = canvas2.height = video.videoHeight;
     video.play();
     //Extract video frames and detect edge while video is playing
     video.onplay = function () {
